@@ -6,7 +6,7 @@ abstract class Gates extends Simulation {
   def AndGateDelay: Int
   def OrGateDelay: Int
 
-  class Wire extends Simulation {
+  class Wire {
 
     private var sigVal = false
     private var actions: List[Action] = List()
@@ -29,6 +29,7 @@ abstract class Gates extends Simulation {
   def inverter(input: Wire, output: Wire): Unit = {
     def invertAction(): Unit = {
       val inputSig = input.getSignal
+      println("inverter")
       afterDelay(InverterDelay) {
         output setSignal (!inputSig)
       }
@@ -38,22 +39,23 @@ abstract class Gates extends Simulation {
   }
 
   def andGate(in1: Wire, in2: Wire, output: Wire): Unit = {
-    def addAction(): Unit = {
+    def andAction(): Unit = {
       val in1Sig = in1.getSignal
       val in2Sig = in2.getSignal
+      println("and ")
       afterDelay(AndGateDelay) {
         output setSignal (in1Sig & in2Sig)
       }
     }
-
-    in1 addAction addAction
-    in2 addAction addAction
+    in1 addAction andAction
+    in2 addAction andAction
   }
 
   def orGate(in1: Wire, in2: Wire, output: Wire): Unit = {
     def orAction(): Unit = {
       val in1Sig = in1.getSignal
       val in2Sig = in2.getSignal
+      println("or")
       afterDelay(OrGateDelay) {
         output setSignal (in1Sig | in2Sig)
       }
@@ -65,7 +67,7 @@ abstract class Gates extends Simulation {
 
   def probe(name: String, wire: Wire): Unit = {
     def probeAction(): Unit = {
-      println(s"$name $currentTime value = ${wire.getSignal}")
+      println(s"$name $currentTime new-value = ${wire.getSignal}")
     }
     wire addAction probeAction
   }
