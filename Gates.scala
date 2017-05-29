@@ -6,6 +6,26 @@ abstract class Gates extends Simulation {
   def AndGateDelay: Int
   def OrGateDelay: Int
 
+  class Wire extends Simulation {
+
+    private var sigVal = false
+    private var actions: List[Action] = List()
+
+    def getSignal: Boolean = sigVal
+
+    def setSignal(s: Boolean): Unit = {
+      if (s != sigVal) {
+        sigVal = s
+        actions foreach (_ ())
+      }
+    }
+
+    def addAction(a: Action): Unit = {
+      actions = a :: actions
+      a()
+    }
+  }
+
   def inverter(input: Wire, output: Wire): Unit = {
     def invertAction(): Unit = {
       val inputSig = input.getSignal
@@ -41,5 +61,12 @@ abstract class Gates extends Simulation {
 
     in1 addAction orAction
     in2 addAction orAction
+  }
+
+  def probe(name: String, wire: Wire): Unit = {
+    def probeAction(): Unit = {
+      println(s"$name $currentTime value = ${wire.getSignal}")
+    }
+    wire addAction probeAction
   }
 }
