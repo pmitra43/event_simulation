@@ -1,6 +1,10 @@
 package week3.event_simulation
 
-class Gates extends Simulation with Parameters {
+abstract class Gates extends Simulation {
+
+  def InverterDelay: Int
+  def AndGateDelay: Int
+  def OrGateDelay: Int
 
   def inverter(input: Wire, output: Wire): Unit = {
     def invertAction(): Unit = {
