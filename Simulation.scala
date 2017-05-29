@@ -1,6 +1,6 @@
 package week3.event_simulation
 
-trait Simulation {
+abstract class Simulation {
 
   type Action = () => Unit
 
